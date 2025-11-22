@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dummy Login System – DevSecOps Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <main class="page-wrapper">
+        <section class="card">
+            <header class="card-header">
+                <h1 class="app-title">Dummy Login System</h1>
+                <p class="app-subtitle">DevSecOps CI · SonarQube · Docker</p>
+            </header>
+
+            <form id="loginForm" class="login-form">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username"/>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password"/>
+                </div>
+
+                <button type="submit" class="btn-primary">Login</button>
+                <p id="message" class="message"></p>
+            </form>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
