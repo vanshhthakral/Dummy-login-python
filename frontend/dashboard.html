@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>DevSecOps Dashboard – Dummy Login System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <main class="page-wrapper">
+        <section class="card card--wide">
+            <header class="card-header card-header--row">
+                <div>
+                    <h1 class="app-title">DevSecOps Dashboard</h1>
+                    <p class="app-subtitle">
+                        Secured via Jenkins · SonarQube · Docker
+                    </p>
+                </div>
+
+                <div class="header-actions">
+                    <span class="badge badge--success">Pipeline: Healthy</span>
+                    <button class="btn-secondary" onclick="logout()">
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <section class="grid grid-2">
+                <!-- Left column -->
+                <div class="panel">
+                    <h2 class="panel-title">Welcome, <span id="usernameLabel">admin</span></h2>
+                    <p class="panel-text">
+                        This dashboard represents the state of your
+                        <strong>secure CI/CD pipeline</strong>. Any code changes to the
+                        dummy login system are:
+                    </p>
+                    <ul class="list-bullets">
+                        <li>Scanned by <strong>SonarQube</strong> for vulnerabilities</li>
+                        <li>Blocked if the <strong>quality gate fails</strong></li>
+                        <li>Packaged into a <strong>Docker image</strong> only if safe</li>
+                        <li>Deployed as a local container for demo</li>
+                    </ul>
+                </div>
+
+                <!-- Right column: quick stats -->
+                <div class="panel">
+                    <h2 class="panel-title">Quick Security Snapshot</h2>
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">Vulnerabilities</div>
+                            <div class="stat-value stat-value--good">0</div>
+                            <div class="stat-foot">after latest scan</div>
+                        </div>
+
+                            <div class="stat-card">
+                            <div class="stat-label">Code Smells</div>
+                            <div class="stat-value">5</div>
+                            <div class="stat-foot">reduced from 22</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-label">Build Status</div>
+                            <div class="stat-value stat-value--good">PASS</div>
+                            <div class="stat-foot">via Jenkins</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel panel--full">
+                <h2 class="panel-title">Pipeline Stages</h2>
+                <div class="pipeline">
+                    <div class="pipeline-step">
+                        <div class="circle circle--done">1</div>
+                        <div class="pipeline-label">
+                            <strong>GitHub Commit</strong>
+                            <span>Developer pushes code</span>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-arrow">→</div>
+
+                    <div class="pipeline-step">
+                        <div class="circle circle--done">2</div>
+                        <div class="pipeline-label">
+                            <strong>Jenkins CI</strong>
+                            <span>Pipeline triggered</span>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-arrow">→</div>
+
+                    <div class="pipeline-step">
+                        <div class="circle circle--done">3</div>
+                        <div class="pipeline-label">
+                            <strong>SonarQube Scan</strong>
+                            <span>SAST + Quality Gate</span>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-arrow">→</div>
+
+                    <div class="pipeline-step">
+                        <div class="circle circle--done">4</div>
+                        <div class="pipeline-label">
+                            <strong>Docker Build</strong>
+                            <span>Image created on success</span>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-arrow">→</div>
+
+                    <div class="pipeline-step">
+                        <div class="circle circle--done">5</div>
+                        <div class="pipeline-label">
+                            <strong>Local Deploy</strong>
+                            <span>Container running</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel panel--full panel--muted">
+                <h2 class="panel-title">Demo Notes</h2>
+                <p class="panel-text">
+                    Use this dashboard in your viva to explain how
+                    <strong>DevSecOps</strong> is implemented:
+                </p>
+                <ol class="list-steps">
+                    <li>
+                        The Python login system is pushed to GitHub.
+                    </li>
+                    <li>
+                        Jenkins automatically triggers the pipeline and runs SonarQube.
+                    </li>
+                    <li>
+                        If high-severity issues are found, the pipeline blocks Docker build.
+                    </li>
+                    <li>
+                        Only when the quality gate passes, the Docker image is built and deployed locally.
+                    </li>
+                </ol>
+            </section>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
