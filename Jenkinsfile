@@ -17,7 +17,7 @@ pipeline {
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh 'sonar-scanner'
+                    bat 'sonar-scanner.bat'
                 }
             }
         }
@@ -25,9 +25,11 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    def qg = waitForQualityGate()
-                    if (qg.status != 'OK') {
-                        error "❌ SECURITY FAILED: Issues found! Deployment blocked!"
+                    timeout(time: 2, unit: 'MINUTES') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "❌ SECURITY FAILED: Issues found! Deployment blocked!"
+                        }
                     }
                 }
             }
@@ -35,16 +37,15 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
+                bat "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
         stage('Deploy Container') {
             steps {
-                sh """
-                    if [ \$(docker ps -aq -f name=${DOCKER_CONTAINER}) ]; then
-                        docker rm -f ${DOCKER_CONTAINER}
-                    fi
+                bat """
+                    docker stop ${DOCKER_CONTAINER} || true
+                    docker rm ${DOCKER_CONTAINER} || true
                     docker run -d --name ${DOCKER_CONTAINER} ${DOCKER_IMAGE}
                 """
             }
