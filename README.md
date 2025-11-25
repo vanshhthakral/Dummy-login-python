@@ -123,8 +123,11 @@ Dummy-login-python/
 
 ## 🙌 About Team:
 Dimple Lulla (Team Lead)	   500120422	Batch-2
+
 Anshi Agrawal (Project Lead)	500124498	Batch-1
+
 Vansh Thakral	               500125288	Batch-1
+
 Jiya Tyagi	                  500119743	Batch-2
 
 This dashboard is for academic demonstration of:
