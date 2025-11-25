@@ -30,6 +30,15 @@ If security passes the **quality gate**:
 🟢 Dashboard can be shown live
 
 ---
+### 🔎 Pipeline Gate Logic
+
+| Quality Gate Status | Behavior |
+|---------------------|----------|
+| 🟢 **PASS**     | Pipeline continues → Docker image built → Application deployment |
+| 🔴 **FAIL** | Pipeline stops → No deployment → Prevents vulnerabilities from going live |
+
+✔ This is a real DevSecOps security enforcement example
+
 
 ## 🎯 Dashboard Goals
 
@@ -68,12 +77,25 @@ Students can use this dashboard during viva to **explain DevSecOps without openi
 
 ```
 
-frontend/
-├── index.html        # Login page
-├── dashboard.html    # Dashboard page (this file displays pipeline results)
-├── styles.css        # Shared UI theme
-└── app.js / dashboard.js
-
+Dummy-login-python/
+├── frontend/
+│   ├── index.html       # Login page UI
+│   ├── dashboard.html   # Visual view of pipeline result
+│   ├── app.js
+│   ├── dashboard.js
+│   └── styles.css
+│
+├── auth.py              # Simple backend authentication logic
+├── login.py             # Main backend
+├── config.py            # Configuration variables
+│
+├── requirements.txt     # Python dependencies
+├── Dockerfile           # Containerization for final deployment
+├── Jenkinsfile          # CI/CD automation pipeline
+├── sonar-project.properties # SonarQube scan configuration
+│
+├── README.md
+└── DevSecOps Project Report .docx 
 ```
 
 ---
@@ -82,18 +104,15 @@ frontend/
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | HTML, CSS (glassmorphism), JavaScript |
-| Infrastructure | Docker |
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Python |
+| Containerization | Docker |
 | CI/CD | Jenkins |
 | Security Scan | SonarQube |
-
-The dashboard is **static** and can run locally by just **opening `dashboard.html` in any browser**.
 
 ---
 
 ## 🔮 Possible Future Additions
-
-These are optional and can impress evaluators:
 
 - Live API connection to Jenkins/SonarQube via webhooks
 - History chart (vulnerabilities over time)
@@ -102,30 +121,14 @@ These are optional and can impress evaluators:
 
 ---
 
-## 🙌 Author Notes
+## 🙌 About Team:
+Dimple Lulla (Team Lead)	   500120422	Batch-2
+Anshi Agrawal (Project Lead)	500124498	Batch-1
+Vansh Thakral	               500125288	Batch-1
+Jiya Tyagi	                  500119743	Batch-2
 
 This dashboard is for academic demonstration of:
 - **DevSecOps**
 - **Security Gates in CI/CD**
 - **Secure deployment flow automation**
 ```
-
----
-
-### 📍 Optional small improvement (for bonus marks)
-
-On the dashboard top right badge:
-
-```
-Pipeline: Healthy
-```
-
-You can manually update it before viva depending on your latest Jenkins run:
-
-| If SonarQube Quality Gate PASSED | If FAILED                     |
-| -------------------------------- | ----------------------------- |
-| 🟢 Pipeline: Healthy             | 🔴 Pipeline: Blocked          |
-| Container deployed               | Build stopped — no deployment |
-
-This is a **great talking point** in evaluation.
-
