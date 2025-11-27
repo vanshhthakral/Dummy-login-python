@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Load the SonarQube token from Jenkins Credentials for use across the pipeline
+        // Load the SonarQube token from Jenkins Credentials. 
+        // We keep this here in case other stages need it, but it's not explicitly
+        // passed in the 'withSonarQubeEnv' block.
         SONAR_TOKEN = credentials('sonar-token') 
     }
 
@@ -19,8 +21,7 @@ pipeline {
             steps {
                 echo 'Running SonarQube analysis...'
                 withSonarQubeEnv('MySonarQube') {
-                    // Using 'bat' for Windows execution. 
-                    // The 'withSonarQubeEnv' wrapper handles the token automatically.
+                    // Using 'bat' for Windows execution. Removed manual -Dsonar.login.
                     bat """
                     sonar-scanner ^
                     -Dsonar.projectKey=dummy-login ^
@@ -34,10 +35,8 @@ pipeline {
         stage('Quality Gate Check') {
             steps {
                 echo 'Waiting for SonarQube Quality Gate status... (Max 5 minutes)'
-                // The 'timeout' prevents the pipeline from hanging indefinitely.
                 timeout(time: 5, unit: 'MINUTES') {
-                    // This waits for the SonarQube result. 
-                    // If the Quality Gate fails, the pipeline will stop here.
+                    // This waits for the Quality Gate result and fails the pipeline if the gate is broken.
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -54,8 +53,9 @@ pipeline {
         stage('Docker Run') {
             steps {
                 echo 'Running Docker container...'
-                // Correctly uses 'bat' for Windows
-                bat 'docker run --rm dummy-login'
+                // ADDED -i FLAG to keep STDIN open. This prevents the EOFError
+                // when your Python script tries to read interactive input.
+                bat 'docker run -i --rm dummy-login'
             }
         }
     }
@@ -65,8 +65,7 @@ pipeline {
             echo 'Pipeline completed successfully! ✅'
         }
         failure {
-            // This message will appear if any stage, including Quality Gate, fails.
             echo 'Pipeline failed ❌ - Check console output for details.'
         }
     }
-}
+} 
