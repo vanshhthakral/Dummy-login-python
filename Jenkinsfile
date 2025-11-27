@@ -2,9 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Load the SonarQube token from Jenkins Credentials. 
-        // We keep this here in case other stages need it, but it's not explicitly
-        // passed in the 'withSonarQubeEnv' block.
+        // Load the SonarQube token from Jenkins Credentials.
         SONAR_TOKEN = credentials('sonar-token') 
     }
 
@@ -21,7 +19,7 @@ pipeline {
             steps {
                 echo 'Running SonarQube analysis...'
                 withSonarQubeEnv('MySonarQube') {
-                    // Using 'bat' for Windows execution. Removed manual -Dsonar.login.
+                    // FIX: Using 'bat' for Windows execution. Removed manual -Dsonar.login.
                     bat """
                     sonar-scanner ^
                     -Dsonar.projectKey=dummy-login ^
@@ -36,7 +34,7 @@ pipeline {
             steps {
                 echo 'Waiting for SonarQube Quality Gate status... (Max 5 minutes)'
                 timeout(time: 5, unit: 'MINUTES') {
-                    // This waits for the Quality Gate result and fails the pipeline if the gate is broken.
+                    // This ensures the pipeline fails if new vulnerabilities are found.
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -53,9 +51,11 @@ pipeline {
         stage('Docker Run') {
             steps {
                 echo 'Running Docker container...'
-                // ADDED -i FLAG to keep STDIN open. This prevents the EOFError
-                // when your Python script tries to read interactive input.
-                bat 'docker run -i --rm dummy-login'
+                // FINAL FIX: Using -it for Interactive and TTY. This prevents the EOFError
+                // by allocating a terminal for your interactive Python script.
+                // NOTE: This stage will now wait indefinitely for input unless you manually 
+                // stop the build or set a job timeout.
+                bat 'docker run -it --rm dummy-login' 
             }
         }
     }
@@ -68,4 +68,4 @@ pipeline {
             echo 'Pipeline failed ❌ - Check console output for details.'
         }
     }
-} 
+}
