@@ -2,60 +2,55 @@ pipeline {
     agent any
 
     environment {
-        SONAR_HOST_URL = 'http://localhost:9000'
-        SONAR_SCANNER = 'MySonarQube'
-        SONAR_PROJECT_KEY = 'dummy-login'
-        SONAR_TOKEN = credentials('sonar-token')   // <-- IMPORTANT FIX
+        SONAR_TOKEN = credentials('sonar-token') // your SonarQube token
     }
 
     stages {
 
         stage('Checkout') {
             steps {
-                echo "Pulling latest code..."
-                git(
-                    branch: 'main',
-                    url: 'https://github.com/vanshhthakral/Dummy-login-python.git'
-                )
+                echo 'Pulling latest code...'
+                checkout scm
             }
         }
 
-        stage("SonarQube Analysis") {
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONAR_SCANNER}") {
-                    sh """
-                        sonar-scanner \
-                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                        -Dsonar.sources=. \
-                        -Dsonar.python.version=3.10 \
-                        -Dsonar.host.url=${SONAR_HOST_URL} \
-                        -Dsonar.login=${SONAR_TOKEN}
+                echo 'Running SonarQube analysis...'
+                withSonarQubeEnv('MySonarQube') {
+                    // Using 'bat' for Windows
+                    bat """
+                    sonar-scanner ^
+                    -Dsonar.projectKey=dummy-login ^
+                    -Dsonar.sources=. ^
+                    -Dsonar.host.url=http://localhost:9000 ^
+                    -Dsonar.login=%SONAR_TOKEN%
                     """
                 }
             }
         }
 
-        stage("Docker Build") {
+        stage('Docker Build') {
             steps {
-                echo "Building Docker image..."
-                sh "docker build -t dummy-login-app ."
+                echo 'Building Docker image...'
+                bat 'docker build -t dummy-login .'
             }
         }
 
-        stage("Docker Run") {
+        stage('Docker Run') {
             steps {
-                echo 'Running application container...'
-                sh "docker run --rm dummy-login-app"
+                echo 'Running Docker container...'
+                bat 'docker run --rm dummy-login'
             }
         }
     }
 
     post {
         success {
-            echo "Pipeline completed successfully ✔"
+            echo 'Pipeline completed successfully! ✅'
         }
         failure {
-            echo "Pipeline failed ❌"
+            echo 'Pipeline failed ❌'
         }
     }
 }
