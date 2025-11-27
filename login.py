@@ -1,19 +1,14 @@
-# login.py
 """
 Main entry point for the dummy login system.
 
-This script:
-- Shows a simple text menu
-- Prompts for username & password
-- Calls insecure audit log
-- Uses duplicate validation logic
+Improved:
+- Removed plaintext logging
+- Added input validation
+- Added exception handling
+- Removed duplicate validation logic
 """
 
-from auth import (
-    validate_credentials,
-    insecure_audit_log,
-    validate_again_in_a_bad_way,
-)
+from auth import validate_credentials
 
 
 def show_menu():
@@ -23,27 +18,25 @@ def show_menu():
 
 
 def login_flow():
-    username = input("Enter username: ")
-    password = input("Enter password: ")
+    try:
+        username = input("Enter username: ").strip()
+        password = input("Enter password: ").strip()
 
-    #  Insecure logging of credentials
-    insecure_audit_log(username, password)
+        if not username or not password:
+            print("\n❌ Username and password cannot be empty.\n")
+            return
 
-    # Unnecessary double validation 
-    is_valid_first = validate_credentials(username, password)
-    is_valid_second = validate_again_in_a_bad_way(username, password)
+        if validate_credentials(username, password):
+            print(f"\n✅ Login successful. Welcome, {username}!\n")
+            secret_admin_panel(username)
+        else:
+            print("\n❌ Invalid credentials!\n")
 
-    if is_valid_first and is_valid_second:
-        print(f"\n✅ Login successful. Welcome, {username}!\n")
-        secret_admin_panel(username)
-    else:
-        print("\n❌ Invalid credentials!\n")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 def secret_admin_panel(username: str):
-    """
-    Fake admin panel – not protected properly (just prints options).
-    """
     print(f"[ADMIN PANEL] Logged in as: {username}")
     print("1. View users (not implemented)")
     print("2. Delete user (not implemented)")
@@ -51,10 +44,9 @@ def secret_admin_panel(username: str):
 
 
 def main():
-    # No input validation, no exception handling (also intentionally weak)
     while True:
         show_menu()
-        choice = input("Choose an option: ")
+        choice = input("Choose an option: ").strip()
 
         if choice == "1":
             login_flow()
