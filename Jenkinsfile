@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonar-token') // your SonarQube token
+        // Load the SonarQube token from Jenkins Credentials for use across the pipeline
+        SONAR_TOKEN = credentials('sonar-token') 
     }
 
     stages {
@@ -18,14 +19,26 @@ pipeline {
             steps {
                 echo 'Running SonarQube analysis...'
                 withSonarQubeEnv('MySonarQube') {
-                    // Using 'bat' for Windows
+                    // Using 'bat' for Windows execution. 
+                    // The 'withSonarQubeEnv' wrapper handles the token automatically.
                     bat """
                     sonar-scanner ^
                     -Dsonar.projectKey=dummy-login ^
                     -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000 ^
-                    -Dsonar.login=%SONAR_TOKEN%
+                    -Dsonar.host.url=http://localhost:9000
                     """
+                }
+            }
+        }
+
+        stage('Quality Gate Check') {
+            steps {
+                echo 'Waiting for SonarQube Quality Gate status... (Max 5 minutes)'
+                // The 'timeout' prevents the pipeline from hanging indefinitely.
+                timeout(time: 5, unit: 'MINUTES') {
+                    // This waits for the SonarQube result. 
+                    // If the Quality Gate fails, the pipeline will stop here.
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -33,6 +46,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Building Docker image...'
+                // Correctly uses 'bat' for Windows
                 bat 'docker build -t dummy-login .'
             }
         }
@@ -40,6 +54,7 @@ pipeline {
         stage('Docker Run') {
             steps {
                 echo 'Running Docker container...'
+                // Correctly uses 'bat' for Windows
                 bat 'docker run --rm dummy-login'
             }
         }
@@ -50,7 +65,8 @@ pipeline {
             echo 'Pipeline completed successfully! ✅'
         }
         failure {
-            echo 'Pipeline failed ❌'
+            // This message will appear if any stage, including Quality Gate, fails.
+            echo 'Pipeline failed ❌ - Check console output for details.'
         }
     }
 }
