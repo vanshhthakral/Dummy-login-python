@@ -5,6 +5,7 @@ pipeline {
         SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_SCANNER = 'MySonarQube'
         SONAR_PROJECT_KEY = 'dummy-login'
+        SONAR_TOKEN = credentials('sonar-token')   // <-- IMPORTANT FIX
     }
 
     stages {
@@ -12,8 +13,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Pulling latest code..."
-                git branch: 'main',
-                    url: 'https://github.com/vanshhthakral/Dummy-login-python.git', branch: 'main'
+                git(
+                    branch: 'main',
+                    url: 'https://github.com/vanshhthakral/Dummy-login-python.git'
+                )
             }
         }
 
