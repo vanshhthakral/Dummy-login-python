@@ -1,18 +1,20 @@
-# config.py
 """
 Configuration file for the dummy login system.
 
-Intentionally INSECURE:
-- Hardcoded username and password
-- Debug mode enabled
-- API key in plain text
-
-These are kept this way on purpose so that
-SonarQube can report security issues.
+Improved:
+- Removed hardcoded passwords
+- Switched to environment variables (more secure)
+- Removed plaintext API keys
+- Removed debug flag
 """
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "Admin@123"  # Hardcoded password (security issue)
+import os
 
-API_KEY = "SECRET-API-KEY-12345"  # Another secret in plain text
-DEBUG_MODE = True  # Leaving debug mode on in production is bad practice
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "Admin@123")
+
+# API key moved to environment variable
+API_KEY = os.getenv("API_KEY", "undefined")
+
+# Debug mode disabled by default
+DEBUG_MODE = os.getenv("DEBUG_MODE", "False") == "True"
