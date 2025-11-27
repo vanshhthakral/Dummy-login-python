@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo "Pulling latest code..."
                 git branch: 'main',
-                    url: 'https://github.com/<your-username>/<your-repo>.git'
+                    url: 'https://github.com/vanshhthakral/Dummy-login-python.git', branch: 'main'
             }
         }
 
