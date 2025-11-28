@@ -32,15 +32,14 @@
                 <div class="panel">
                     <h2 class="panel-title">Welcome, <span id="usernameLabel">admin</span></h2>
                     <p class="panel-text">
-                        This dashboard represents the state of your
-                        <strong>secure CI/CD pipeline</strong>. Any code changes to the
-                        dummy login system are:
+                        This dashboard represents the operational state of the
+                        <strong>secure CI/CD pipeline</strong>. Code changes in the dummy login system undergo:
                     </p>
                     <ul class="list-bullets">
-                        <li>Scanned by <strong>SonarQube</strong> for vulnerabilities</li>
-                        <li>Blocked if the <strong>quality gate fails</strong></li>
-                        <li>Packaged into a <strong>Docker image</strong> only if safe</li>
-                        <li>Deployed as a local container for demo</li>
+                        <li>Vulnerability scanning using <strong>SonarQube</strong></li>
+                        <li>Pipeline checks where <strong>quality gates must pass</strong></li>
+                        <li>Secure packaging into a <strong>Docker image</strong></li>
+                        <li>Local deployment as a container</li>
                     </ul>
                 </div>
 
@@ -54,7 +53,7 @@
                             <div class="stat-foot">after latest scan</div>
                         </div>
 
-                            <div class="stat-card">
+                        <div class="stat-card">
                             <div class="stat-label">Code Smells</div>
                             <div class="stat-value">5</div>
                             <div class="stat-foot">reduced from 22</div>
@@ -123,24 +122,15 @@
             </section>
 
             <section class="panel panel--full panel--muted">
-                <h2 class="panel-title">Demo Notes</h2>
+                <h2 class="panel-title">Project Notes</h2>
                 <p class="panel-text">
-                    Use this dashboard in your viva to explain how
-                    <strong>DevSecOps</strong> is implemented:
+                    This project demonstrates a fully integrated <strong>DevSecOps pipeline</strong> that includes:
                 </p>
                 <ol class="list-steps">
-                    <li>
-                        The Python login system is pushed to GitHub.
-                    </li>
-                    <li>
-                        Jenkins automatically triggers the pipeline and runs SonarQube.
-                    </li>
-                    <li>
-                        If high-severity issues are found, the pipeline blocks Docker build.
-                    </li>
-                    <li>
-                        Only when the quality gate passes, the Docker image is built and deployed locally.
-                    </li>
+                    <li>Code is pushed to GitHub for version control.</li>
+                    <li>Jenkins triggers the CI/CD pipeline and initiates security scanning.</li>
+                    <li>High-severity vulnerabilities block further stages.</li>
+                    <li>Only secure and validated builds proceed to Docker image creation and deployment.</li>
                 </ol>
             </section>
         </section>
